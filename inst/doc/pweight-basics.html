@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Edgar Dobriban" />
+
+<meta name="date" content="2015-07-28" />
+
+<title>Pweight Basics</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<link href="data:text/css,body%20%7B%0A%20%20background%2Dcolor%3A%20%23fff%3B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20max%2Dwidth%3A%20700px%3B%0A%20%20overflow%3A%20visible%3B%0A%20%20padding%2Dleft%3A%202em%3B%0A%20%20padding%2Dright%3A%202em%3B%0A%20%20font%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0A%20%20font%2Dsize%3A%2014px%3B%0A%20%20line%2Dheight%3A%201%2E35%3B%0A%7D%0A%0A%23header%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0A%0A%23TOC%20%7B%0A%20%20clear%3A%20both%3B%0A%20%20margin%3A%200%200%2010px%2010px%3B%0A%20%20padding%3A%204px%3B%0A%20%20width%3A%20400px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20border%2Dradius%3A%205px%3B%0A%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20font%2Dsize%3A%2013px%3B%0A%20%20line%2Dheight%3A%201%2E3%3B%0A%7D%0A%20%20%23TOC%20%2Etoctitle%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%20%20font%2Dsize%3A%2015px%3B%0A%20%20%20%20margin%2Dleft%3A%205px%3B%0A%20%20%7D%0A%0A%20%20%23TOC%20ul%20%7B%0A%20%20%20%20padding%2Dleft%3A%2040px%3B%0A%20%20%20%20margin%2Dleft%3A%20%2D1%2E5em%3B%0A%20%20%20%20margin%2Dtop%3A%205px%3B%0A%20%20%20%20margin%2Dbottom%3A%205px%3B%0A%20%20%7D%0A%20%20%23TOC%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dleft%3A%20%2D2em%3B%0A%20%20%7D%0A%20%20%23TOC%20li%20%7B%0A%20%20%20%20line%2Dheight%3A%2016px%3B%0A%20%20%7D%0A%0Atable%20%7B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dcolor%3A%20%23DDDDDD%3B%0A%20%20border%2Dstyle%3A%20outset%3B%0A%20%20border%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0A%20%20border%2Dwidth%3A%202px%3B%0A%20%20padding%3A%205px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%20%20line%2Dheight%3A%2018px%3B%0A%20%20padding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0A%20%20border%2Dleft%2Dstyle%3A%20none%3B%0A%20%20border%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Ap%20%7B%0A%20%20margin%3A%200%2E5em%200%3B%0A%7D%0A%0Ablockquote%20%7B%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20padding%3A%200%2E25em%200%2E75em%3B%0A%7D%0A%0Ahr%20%7B%0A%20%20border%2Dstyle%3A%20solid%3B%0A%20%20border%3A%20none%3B%0A%20%20border%2Dtop%3A%201px%20solid%20%23777%3B%0A%20%20margin%3A%2028px%200%3B%0A%7D%0A%0Adl%20%7B%0A%20%20margin%2Dleft%3A%200%3B%0A%7D%0A%20%20dl%20dd%20%7B%0A%20%20%20%20margin%2Dbottom%3A%2013px%3B%0A%20%20%20%20margin%2Dleft%3A%2013px%3B%0A%20%20%7D%0A%20%20dl%20dt%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%7D%0A%0Aul%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%7D%0A%20%20ul%20li%20%7B%0A%20%20%20%20list%2Dstyle%3A%20circle%20outside%3B%0A%20%20%7D%0A%20%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dbottom%3A%200%3B%0A%20%20%7D%0A%0Apre%2C%20code%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20color%3A%20%23333%3B%0A%7D%0Apre%20%7B%0A%20%20white%2Dspace%3A%20pre%2Dwrap%3B%20%20%20%20%2F%2A%20Wrap%20long%20lines%20%2A%2F%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20margin%3A%205px%200px%2010px%200px%3B%0A%20%20padding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Acode%20%7B%0A%20%20font%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0A%20%20font%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0A%20%20padding%3A%202px%200px%3B%0A%7D%0A%0Adiv%2Efigure%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0A%20%20background%2Dcolor%3A%20%23FFFFFF%3B%0A%20%20padding%3A%202px%3B%0A%20%20border%3A%201px%20solid%20%23DDDDDD%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20margin%3A%200%205px%3B%0A%7D%0A%0Ah1%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%20%20font%2Dsize%3A%2035px%3B%0A%20%20line%2Dheight%3A%2040px%3B%0A%7D%0A%0Ah2%20%7B%0A%20%20border%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20padding%2Dbottom%3A%202px%3B%0A%20%20font%2Dsize%3A%20145%25%3B%0A%7D%0A%0Ah3%20%7B%0A%20%20border%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20font%2Dsize%3A%20120%25%3B%0A%7D%0A%0Ah4%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0A%20%20margin%2Dleft%3A%208px%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Ah5%2C%20h6%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23ccc%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Aa%20%7B%0A%20%20color%3A%20%230033dd%3B%0A%20%20text%2Ddecoration%3A%20none%3B%0A%7D%0A%20%20a%3Ahover%20%7B%0A%20%20%20%20color%3A%20%236666ff%3B%20%7D%0A%20%20a%3Avisited%20%7B%0A%20%20%20%20color%3A%20%23800080%3B%20%7D%0A%20%20a%3Avisited%3Ahover%20%7B%0A%20%20%20%20color%3A%20%23BB00BB%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%0A%2F%2A%20Class%20described%20in%20https%3A%2F%2Fbenjeffrey%2Ecom%2Fposts%2Fpandoc%2Dsyntax%2Dhighlighting%2Dcss%0A%20%20%20Colours%20from%20https%3A%2F%2Fgist%2Egithub%2Ecom%2Frobsimmons%2F1172277%20%2A%2F%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Keyword%20%2A%2F%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%2F%2A%20DataType%20%2A%2F%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%2F%2A%20DecVal%20%28decimal%20values%29%20%2A%2F%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20BaseN%20%2A%2F%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Float%20%2A%2F%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Char%20%2A%2F%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20String%20%2A%2F%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%2F%2A%20Comment%20%2A%2F%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%2F%2A%20OtherToken%20%2A%2F%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20AlertToken%20%2A%2F%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Function%20calls%20%2A%2F%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%2F%2A%20ErrorTok%20%2A%2F%0A%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div id="header">
+<h1 class="title">Pweight Basics</h1>
+<h4 class="author"><em>Edgar Dobriban</em></h4>
+<h4 class="date"><em>2015-07-28</em></h4>
+</div>
+
+
+<p>The Pweight R package contains open source implementations of p-value weighting methods for multiple testing, including Spjotvoll, exponential and Bayes weights.</p>
+<p>In this vignette, we will walk through an example data analysis with p-value weights. We will also conduct an example of iGWAS on simulated data.</p>
+<div id="p-value-weighting-methods" class="section level2">
+<h2>P-value weighting methods</h2>
+<p>For each p-value weighting method, we assume we observe data <span class="math">\(T_i \sim \mathcal{N}(\mu_i, 1)\)</span> and test each null hypothesis <span class="math">\(H_i: \mu_i \ge 0\)</span> against <span class="math">\(\mu_i &lt;0\)</span>. The p-value for testing <span class="math">\(H_i\)</span> is <span class="math">\(P_i = \Phi(T_i)\)</span>, where <span class="math">\(\Phi\)</span> is the normal cumulative distribution function. For a weight vector <span class="math">\(w \in [0,\infty)^{J}\)</span> and significance level <span class="math">\(q \in [0,1]\)</span>, the weighted Bonferroni procedure rejects <span class="math">\(H_{i}\)</span> if <span class="math">\(P_i \le q w_i\)</span>. Usual Bonferroni corresponds to <span class="math">\(w_i=1\)</span>.</p>
+<p>Each p-value weighting method assumes some additional independent information about <span class="math">\(\mu_i\)</span>, and returns a weight vector <span class="math">\(w\)</span>. These can then be used for weighted Bonferroni or other multiple testing procedures.</p>
+</div>
+<div id="bayes-weights" class="section level2">
+<h2>Bayes weights</h2>
+<p>Bayes p-value weights are the flagship method of the Pweight package. They assume that the prior information takes the form of normal distributions.</p>
+<p>Bayes p-value weights can be computed using: <code>bayes_weights(eta, sigma, q)</code>. The inputs specify the prior distribution of the means <span class="math">\(\mu_i\)</span> of the test statistics as:</p>
+<p><span class="math">\[\mu_i \sim \mathcal{N}(\eta_i,\sigma_i^2), \mbox{   } i \in \{1,\ldots, J\}\]</span></p>
+<p>where:</p>
+<ul>
+<li><code>eta</code>: the estimated prior means, a vector of length J.</li>
+<li><code>sigma</code>: the estimated prior standard errors of the , a positive vector of length J.</li>
+<li><code>q</code>: level at which tests will be performed. The weights are optimal if each hypothesis is tested at level <span class="math">\(q\)</span>. For instance, if we want to control the FWER globally at <span class="math">\(0.05\)</span>, then we should use <span class="math">\(q = 0.05/J\)</span>.</li>
+</ul>
+<p>The outputs are a list consisting of:</p>
+<ul>
+<li><code>w</code>: the optimal Bayes weights. A non-negative vector of length J.</li>
+<li><code>lambda</code>: the dual certificate, normalizing constant produced by solving the optimization problem;</li>
+<li><code>q_star</code>: true value of q solved for. the value <span class="math">\(q^*\)</span> for which the weights are optimal. This may differ slightly from the original <span class="math">\(q\)</span> if <span class="math">\(q\)</span> is large.</li>
+<li><code>q_thresh</code>: the largest value of <span class="math">\(q\)</span> for which the weights can be computed exactly</li>
+</ul>
+</div>
+<div id="example" class="section level2">
+<h2>Example</h2>
+<p>We will present an example of p-value weighting with simulated data. We generate two sets of test statistics, the prior and the current data. A small fraction of the prior data holds some information about the current data. However, most prior data is noise. In our experience working with GWAS data, this is a reasonable model for association studies done on two independent samples and two distinct traits (such as cardiovascular disease and aging).</p>
+<div id="generating-the-data" class="section level3">
+<h3>Generating the Data</h3>
+<p>We do this by drawing from a mixture distribution. We generate a large number <span class="math">\(J\)</span> of tests. For each test <span class="math">\(i\)</span> we flip a coin <span class="math">\(X_i\)</span>: If <span class="math">\(X_i=1\)</span>, then the prior is meaningful, else it is noise. If the prior is meaningful, we draw a random negative <span class="math">\(\mu_i\)</span> and both test statistics <span class="math">\((T^{1}_i,T^{2}_i)\)</span> are Gaussians centered at <span class="math">\(\mu_i\)</span>. Else we draw two independent normal test statistics <span class="math">\((T^{1}_i,T^{2}_i)\)</span>. This ensures that this small fraction of the data is correlated. The code is:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2</span>)
+J &lt;-<span class="st"> </span><span class="dv">500</span>
+mu &lt;-<span class="st"> </span>-<span class="st"> </span><span class="dv">2</span>*<span class="kw">abs</span>(<span class="kw">rnorm</span>(J))
+frac_sig &lt;-<span class="st"> </span><span class="fl">0.1</span>
+X &lt;-<span class="st"> </span><span class="kw">rbinom</span>(J, <span class="dv">1</span>, frac_sig)
+t1 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(J, X*mu,<span class="dv">1</span>)
+t2 &lt;-<span class="st"> </span><span class="kw">rnorm</span>(J, X*mu,<span class="dv">1</span>)</code></pre>
+<p>The data that this generates shows the desired patter, as can be seen on a scatterplot. Most pairs have no correlation, but there is a small fraction that does.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">scatter.smooth</span>(t1,t2)</code></pre>
+<p><img src="data:image/png;base64,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" /></p>
+<p>The p-values for the one-sided tests <span class="math">\(\mu_i = 0\)</span> vs <span class="math">\(\mu_i &lt;0\)</span> utilizing only the current data are <span class="math">\(P_i = \Phi(T^{2}_i)\)</span>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">P_current &lt;-<span class="st"> </span><span class="kw">pnorm</span>(t2)</code></pre>
+</div>
+<div id="data-analysis-bonferroni" class="section level3">
+<h3>Data Analysis: Bonferroni</h3>
+<p>We want to test the hypotheses <span class="math">\(\mu_i = 0\)</span> against <span class="math">\(\mu_i &lt;0\)</span> for each <span class="math">\(i\)</span> utilizing the current data <span class="math">\(T^{2}_i\)</span>. The simplest way is by Bonferroni-corrected multiple testing. We choose an uncorrected significance level <span class="math">\(\alpha=0.05\)</span> and call the <code>bonferroni(...)</code> function on the p-values.</p>
+<pre class="sourceCode r"><code class="sourceCode r">alpha &lt;-<span class="st"> </span><span class="fl">0.05</span>
+P_adjusted &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(P_current,<span class="st">&quot;bonferroni&quot;</span>)
+ind &lt;-<span class="st"> </span>(P_adjusted&lt;alpha)
+<span class="kw">cat</span>(<span class="kw">c</span>(<span class="st">&quot;Number of significant tests using Bonferroni: &quot;</span>, <span class="kw">sum</span>(ind) ))</code></pre>
+<pre><code>## Number of significant tests using Bonferroni:  4</code></pre>
+<p>Bonferroni leads to 4 significant test statistics.</p>
+</div>
+<div id="data-analysis-p-value-weighting" class="section level3">
+<h3>Data Analysis: P-value Weighting</h3>
+<p>Alternatively, one can do p-value weighting. For this, we use <span class="math">\(T^1\)</span> as prior information. We set the prior standard errors <span class="math">\(\sigma=1\)</span> in this example. More detailed discussion on the choice of <span class="math">\(\sigma\)</span> can be found in <span class="citation">(Dobriban et al. 2015)</span>. As explained earlier, we set <span class="math">\(q = 0.05/J\)</span>. Then we compute the weights. Finally, we run weighted Bonferroni on the weighted p-values <span class="math">\(P'_i = P_i/w_i\)</span>. This is the code that accomplishes it:</p>
+<pre class="sourceCode r"><code class="sourceCode r">q &lt;-<span class="st"> </span>alpha/J
+sigma &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>,J)
+<span class="kw">source</span>(<span class="st">&quot;../R/bayes_weights.R&quot;</span>)
+res &lt;-<span class="st"> </span><span class="kw">bayes_weights</span>(t1,sigma,q)
+w &lt;-<span class="st"> </span>res$w
+P_weighted &lt;-<span class="st"> </span>P_current/w
+P_w_adjusted &lt;-<span class="st"> </span><span class="kw">p.adjust</span>(P_weighted,<span class="st">&quot;bonferroni&quot;</span>)
+ind_w &lt;-<span class="st"> </span>(P_w_adjusted&lt;alpha)
+<span class="kw">cat</span>(<span class="kw">c</span>(<span class="st">&quot;Number of significant tests using Weighting: &quot;</span>, <span class="kw">sum</span>(ind_w) ))</code></pre>
+<pre><code>## Number of significant tests using Weighting:  5</code></pre>
+<p>Hence, in this example weighting increases the number of significant hits from 4 to 5.</p>
+</div>
+</div>
+<div id="post-analysis" class="section level2">
+<h2>Post-Analysis</h2>
+<p>One can get some insight into the procedure by examining which hypotheses were declared significant by the two methods. The following code reveals which test were significant:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">which</span>(ind==<span class="dv">1</span>)</code></pre>
+<pre><code>## [1] 107 108 136 224</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">which</span>(ind_w==<span class="dv">1</span>)</code></pre>
+<pre><code>## [1] 108 135 136 224 266</code></pre>
+<p>In this particular case weighting leads to a strict increase in power, selecting an addional hypothesis. Taking 266 as an example we see that its P-value and z-score in the current data equals</p>
+<pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="dv">266</span>
+P_current[x]</code></pre>
+<pre><code>## [1] 0.0003262349</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">t2[x]</code></pre>
+<pre><code>## [1] -3.40881</code></pre>
+<p>This is not enough for it to be significant since the threshold is <span class="math">\(0.05/J=0.0001\)</span>. However, it gets assigned a large weight, because its prior effect is large. So it’s selected after weighting.</p>
+<pre class="sourceCode r"><code class="sourceCode r">w[x]</code></pre>
+<pre><code>## [1] 9.266014</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">t1[x]</code></pre>
+<pre><code>## [1] -3.125911</code></pre>
+<p>Another insight can be gained from plotting the weights as a function of the prior mean. We see that the weights are non-monotonic as a function of the prior mean. Indeed they place a large mass on the middle means between (-6 and -2).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(t1,w)</code></pre>
+<p><img src="data:image/png;base64,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" /></p>
+</div>
+<div id="igwas" class="section level2">
+<h2>iGWAS</h2>
+<p>Now we perform an informed Genome-Wide Association Study (or iGWAS) on this data set, using the provided  function. For this we need to provide P-values and sample sizes for both the current and the prior studies.</p>
+<p>The p-values are obtained from  just like for  previously.</p>
+<pre class="sourceCode r"><code class="sourceCode r">P_prior &lt;-<span class="st"> </span><span class="kw">pnorm</span>(t1)</code></pre>
+<p>This simulation did not use any specific sample sizes, so we are simply going to assume that the sample sizes are as follows:</p>
+<pre class="sourceCode r"><code class="sourceCode r">N_current &lt;-<span class="st"> </span><span class="dv">1</span>
+N_prior &lt;-<span class="st"> </span><span class="dv">1</span></code></pre>
+<p>Now we can run iGWAS. This method computes the p-value weights based on the prior p-values, and uses them in multiple testing (p-value weighting) for the current p-values. The p-value weighting method (e.g. Unweighted, Bayes) and the multiple testing adjustment (e.g. Bonferroni, Benjamini-Hochberg) can be specified independently. However, we will use the basic settings, which correspond to Bayes weights with Bonferroni testing.</p>
+<p>First we perform unweighted testing.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;../R/iGWAS.R&quot;</span>)
+res_unw &lt;-<span class="st"> </span><span class="kw">iGWAS</span>(P_current, N_current, P_prior, N_prior, <span class="dt">weighting_method=</span><span class="st">&quot;unweighted&quot;</span>)</code></pre>
+<pre><code>## Number of significant tests using unweighted weights and genome-wide correction: 1</code></pre>
+<p>As expected, we get the same results as before. Now, we perform weighted testing. To indicate that the prior p-values are one-sided, we include the ‘sides=1’ argument.</p>
+<pre class="sourceCode r"><code class="sourceCode r">res_w &lt;-<span class="st"> </span><span class="kw">iGWAS</span>(P_current, N_current, P_prior, N_prior, <span class="dt">sides=</span><span class="dv">1</span>)</code></pre>
+<pre><code>## Number of significant tests using bayes weights and genome-wide correction: 1</code></pre>
+<p>Again, p-value weighting leads to improved power, and a larger number of significant hits.</p>
+<div class="references">
+<h2>References</h2>
+<p>Dobriban, Edgar, Kristen Fortney, Art B. Owen, and Stuart K. Kim. 2015. “Optimal Multiple Testing Under a Gaussian Prior on the Effect Sizes.” <em>Arxiv Preprint: Http://arxiv.org/abs/1504.02935</em>.</p>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
